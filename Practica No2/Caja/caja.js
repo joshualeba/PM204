@@ -10,3 +10,13 @@ function agregarPedido(idProducto) {
         }
     }
 }
+
+function eliminarPedido(idProducto) {
+    for (let i = 0; i < listaPedidos.length; i++) {
+        if (listaPedidos[i].id === idProducto) {
+            totalAcumulado -= listaPedidos[i].precio;
+            listaPedidos.splice(i, 1);
+            break;
+        }
+    }
+}
