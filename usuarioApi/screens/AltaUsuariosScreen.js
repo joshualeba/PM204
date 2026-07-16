@@ -31,14 +31,35 @@ export default function App() {
 
         <Pressable 
           style={styles.boton}
-          onPress={() => {
+          onPress={async () => {
             if (nombre.trim() === '' || edad.trim() === '') {
               alert('Por favor, completa todos los campos.');
               return;
             }
-            alert(`Usuario ${nombre} agregado correctamente.`);
-            setNombre('');
-            setEdad('');
+
+            try {
+              const respuesta = await fetch('http://localhost:5000/v1/usuarios/', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  nombre: nombre,
+                  edad: parseInt(edad, 10)
+                })
+              });
+
+              if (respuesta.ok) {
+                alert(`Usuario ${nombre} agregado correctamente en la base de datos.`);
+                setNombre('');
+                setEdad('');
+              } else {
+                alert('Error al agregar el usuario en la base de datos.');
+              }
+            } catch (error) {
+              console.error(error);
+              alert('Error de conexión con la API.');
+            }
           }}
         >
           <Text style={styles.textoBoton}>
